@@ -1,0 +1,18 @@
+# Large binary files (ISO, extracted video)
+*.ISO
+*.iso
+iso_contents/
+extracted/
+mpfull_extracted/
+installer_extracted/
+
+# Claude Code internals
+.claude/
+
+# Windows
+Thumbs.db
+desktop.ini
+
+# Python
+__pycache__/
+*.pyc
