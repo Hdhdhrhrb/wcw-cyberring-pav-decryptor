@@ -2,6 +2,8 @@
 
 **Reverse engineered 1999 ULI Player encryption to recover lost WCW wrestling content after 25 years.**
 
+![Recovered CyberRing match - wrestlers in a CGI arena with composited fire effects, 320x240 MPEG-1](screenshot.png)
+
 The WCW Internet Powerdisk ("CyberRing" / "Slam Society") was a promotional CD-ROM bundled
 with WCW Magazine in 1999. It contained 61 wrestling video clips encrypted with a proprietary
 format that required an online server for decryption keys. When UIT's servers went offline
