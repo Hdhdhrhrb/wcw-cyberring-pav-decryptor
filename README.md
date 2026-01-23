@@ -1,8 +1,19 @@
 # WCW CyberRing PAV Decryptor
 
+[![Python 3.6+](https://img.shields.io/badge/python-3.6+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey.svg)]()
+[![Files Recovered](https://img.shields.io/badge/files%20recovered-61%2F61-brightgreen.svg)]()
+[![Content](https://img.shields.io/badge/content-51%20min%2020%20sec-orange.svg)]()
+[![Year](https://img.shields.io/badge/encrypted%20since-1999-red.svg)]()
+[![DRM Status](https://img.shields.io/badge/DRM-defeated-brightgreen.svg)]()
+
 **Reverse engineered 1999 ULI Player encryption to recover lost WCW wrestling content after 25 years.**
 
 ![Recovered CyberRing match - wrestlers in a CGI arena with composited fire effects, 320x240 MPEG-1](screenshot.png)
+*Frame from TVKCYBER.mpg - a WCW match filmed against blue screen with CGI "CyberRing" arena composited in. This content has been inaccessible since ~2000.*
+
+---
 
 The WCW Internet Powerdisk ("CyberRing" / "Slam Society") was a promotional CD-ROM bundled
 with WCW Magazine in 1999. It contained 61 wrestling video clips encrypted with a proprietary
