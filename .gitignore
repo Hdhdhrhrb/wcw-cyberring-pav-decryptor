@@ -17,3 +17,6 @@ desktop.ini
 # Python
 __pycache__/
 *.pyc
+
+# Personal/drafts
+MEDIUM_ARTICLE.md
