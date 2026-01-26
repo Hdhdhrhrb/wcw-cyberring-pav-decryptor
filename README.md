@@ -12,7 +12,7 @@
 
 ![Recovered CyberRing match - wrestlers in a CGI arena with composited fire effects, 320x240 MPEG-1](screenshot.png)
 
-<p align="center"><em>Frame from a recovered "CyberRing" match — WCW wrestlers filmed against blue screen, composited into a CGI arena with fire effects. This is what 1999 interactive entertainment looked like.</em></p>
+<p align="center"><em>Frame from a recovered "CyberRing" match. WCW wrestlers were filmed against blue screen and composited into a CGI arena with fire effects. This is what 1999 interactive entertainment looked like.</em></p>
 
 ## Background
 
@@ -63,7 +63,7 @@ Each `.PAV` file is encrypted with a **repeating-key byte-subtraction cipher**:
 plaintext[i] = (ciphertext[i] - key[i % key_length]) mod 256
 ```
 
-Keys are unique per file, 8–24 bytes of printable ASCII, randomly generated at
+Keys are unique per file, ranging from 8 to 24 bytes of printable ASCII, randomly generated at
 encoding time. The decryption routine lives inside `PavSource.ax`, a 24 KB
 DirectShow source filter built in April 1999:
 
@@ -76,16 +76,16 @@ sub  byte ptr [eax], cl      ; plaintext = ciphertext - key_byte
 
 No brute force. No emulation. No server. The keys are recovered mathematically:
 
-1. **MPEG-1 files end with known bytes** — `0xFF` padding followed by the
-   Program End Code (`00 00 01 B9`)
+1. **MPEG-1 files end with known bytes.** The file tail contains `0xFF` padding followed by the
+   Program End Code (`00 00 01 B9`).
 
-2. **A repeating key over a constant produces a repeating pattern** — the
-   encrypted tail has detectable periodicity equal to the key length
+2. **A repeating key over a constant produces a repeating pattern.** The
+   encrypted tail has detectable periodicity equal to the key length.
 
-3. **Key recovery is algebraic** — `key[i] = (ciphertext[i] - 0xFF) mod 256`
+3. **Key recovery is algebraic.** Given the known plaintext, we can derive `key[i] = (ciphertext[i] - 0xFF) mod 256`.
 
-4. **Verification is structural** — decrypted output must begin with a valid
-   MPEG-1 Pack Start Code (`00 00 01 BA`)
+4. **Verification is structural.** The decrypted output must begin with a valid
+   MPEG-1 Pack Start Code (`00 00 01 BA`).
 
 The entire attack executes in seconds with no external input.
 
@@ -95,11 +95,11 @@ The entire attack executes in seconds with no external input.
 ┌─────────────────────────────────────────────────┐
 │ "PAVENCRYPT" magic (10 bytes)                   │
 ├─────────────────────────────────────────────────┤
-│ Unencrypted MPEG-1 preview (16–32 KB)           │
-│ 2 video frames, no audio — serves as thumbnail  │
+│ Unencrypted MPEG-1 preview (16-32 KB)           │
+│ 2 video frames, no audio (serves as thumbnail)  │
 ├─────────────────────────────────────────────────┤
 │ Encrypted MPEG-1 Program Stream                 │
-│ Per-file subtraction key, 8–24 bytes            │
+│ Per-file subtraction key, 8-24 bytes            │
 │                                                 │
 │ Video: 320×240, 30fps, ~1.29 Mbps               │
 │ Audio: MP2, 44.1 kHz, mono, 64 kbps            │
@@ -122,9 +122,9 @@ The entire attack executes in seconds with no external input.
 ## Repository
 
 ```
-decrypt_pav.py       Decryptor — key recovery + decryption to MPEG-1
-convert_mp4.py       Transcoder — batch MPEG-1 to H.264/AAC MP4
-analyze_pav.py       Inspector — non-destructive PAV structure analysis
+decrypt_pav.py       Decryptor: key recovery + decryption to MPEG-1
+convert_mp4.py       Transcoder: batch MPEG-1 to H.264/AAC MP4
+analyze_pav.py       Inspector: non-destructive PAV structure analysis
 PavSource.ax         Original DirectShow filter binary (reversed)
 UlPlayer.exe         Original ULI Player application
 FINDINGS.md          Technical report: format spec, disassembly, all 61 keys
@@ -135,7 +135,7 @@ TIMELINE.md          Reverse engineering methodology, step by step
 
 This tool works on any PAVENCRYPT-format file. ULI Player was licensed to multiple
 content distributors in the late 1990s. The attack generalizes to any repeating-key
-cipher applied to a file format with predictable byte patterns — which describes
+cipher applied to a file format with predictable byte patterns, which describes
 most proprietary DRM schemes from that era.
 
 ## License
