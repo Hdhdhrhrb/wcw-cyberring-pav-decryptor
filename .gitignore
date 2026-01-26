@@ -20,3 +20,6 @@ __pycache__/
 
 # Personal/drafts
 MEDIUM_ARTICLE.md
+
+# Git
+.gitignore
