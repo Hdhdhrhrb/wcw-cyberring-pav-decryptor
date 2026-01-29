@@ -41,7 +41,7 @@ This directly describes the time-based key generation system we reverse engineer
 - Why the DRM relied entirely on network connectivity
 - The time-based security model (keys expired after specific durations)
 
-Our technical analysis in 2024-2025 independently rediscovered this server-side key generation architecture through static binary analysis of `PavSource.ax`.
+Our technical analysis in 2026 independently rediscovered this server-side key generation architecture through static binary analysis of `PavSource.ax`.
 
 ### Exhibit A, Section 5: ULI Video Player
 
