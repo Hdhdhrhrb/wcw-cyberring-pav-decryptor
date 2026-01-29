@@ -17,7 +17,7 @@
 ## Background
 
 The **WCW Internet Powerdisk** was a promotional CD-ROM distributed with WCW Magazine
-in 1999. It shipped 61 video clips — match highlights, wrestler profiles, show intros —
+in 1999. It shipped 61 video clips (match highlights, wrestler profiles, show intros)
 encrypted with a proprietary system called **PAVENCRYPT**, developed by a company called UIT.
 
 Playback required the bundled ULI Player, which fetched per-file decryption keys from a
@@ -28,6 +28,8 @@ content became permanently inaccessible. The player would only display:
 
 No keys exist on the disc. No documentation of the format was ever published. UIT appears
 to have dissolved entirely. For 25 years, the content has been unplayable.
+
+**Our reverse engineering findings are corroborated by the [original 1999 license agreement](docs/PRIMARY_SOURCES.md) filed with the SEC, which describes the "Server Side Key Generator Program" creating "security keys based on time."**
 
 ## Recovered Content
 
@@ -122,13 +124,14 @@ The entire attack executes in seconds with no external input.
 ## Repository
 
 ```
-decrypt_pav.py       Decryptor: key recovery + decryption to MPEG-1
-convert_mp4.py       Transcoder: batch MPEG-1 to H.264/AAC MP4
-analyze_pav.py       Inspector: non-destructive PAV structure analysis
-PavSource.ax         Original DirectShow filter binary (reversed)
-UlPlayer.exe         Original ULI Player application
-FINDINGS.md          Technical report: format spec, disassembly, all 61 keys
-TIMELINE.md          Reverse engineering methodology, step by step
+decrypt_pav.py          Decryptor: key recovery + decryption to MPEG-1
+convert_mp4.py          Transcoder: batch MPEG-1 to H.264/AAC MP4
+analyze_pav.py          Inspector: non-destructive PAV structure analysis
+PavSource.ax            Original DirectShow filter binary (reversed)
+UlPlayer.exe            Original ULI Player application
+FINDINGS.md             Technical report: format spec, disassembly, all 61 keys
+TIMELINE.md             Reverse engineering methodology, step by step
+docs/PRIMARY_SOURCES.md Original 1999 SEC filing documenting the encryption system
 ```
 
 ## Broader Applicability

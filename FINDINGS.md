@@ -4,8 +4,8 @@
 
 The **WCW Internet Powerdisk** (variously labeled "CyberRing" and "Slam Society" on-disc)
 was a promotional CD-ROM bundled with WCW Magazine in late 1999. It contained exclusive
-wrestling video content - match highlights, wrestler bios, merchandise promos, and storyline
-segments - featuring stars like Hulk Hogan, Goldberg, Sting, DDP, and Kevin Nash.
+wrestling video content: match highlights, wrestler bios, merchandise promos, and storyline
+segments featuring stars like Hulk Hogan, Goldberg, Sting, DDP, and Kevin Nash.
 
 The disc used a proprietary DRM system created by a company called **UIT** (makers of the
 "ULI Player"). Videos were encrypted in a format called **PAVENCRYPT** and required the
@@ -17,12 +17,45 @@ transparently decrypted the stream during graph playback.
 
 When UIT's key server went offline around 2000 (shortly after WCW itself folded in 2001),
 the encrypted content became permanently inaccessible. The player would display:
-*"Decryption key not found in the server database"*. No keys were stored on the disc,
-no offline fallback existed, and UIT appears to have dissolved without any public
+*"Decryption key not found in the server database"*. No keys were stored on the disc.
+No offline fallback existed. UIT appears to have dissolved without any public
 documentation of their format.
 
 For 25 years, these 61 video files sat encrypted on anyone's copy of the disc with no
-known method of recovery - until now.
+known method of recovery. Until now.
+
+---
+
+## Primary Source Documentation
+
+Our reverse engineering findings are validated by primary source legal documentation: the **original 1999 license agreement between UIT and WCW**, filed with the SEC as Exhibit 10.48.
+
+### Key Evidence from SEC Filing
+
+**From Exhibit A, Section 3 (Server Side Key Generator Program):**
+> "The application will have the capability to create security keys based on time. Therefore, the end user will only be able to utilize the video while they are connected to the Internet and only for specific amounts of time."
+
+**From Exhibit A, Section 5 (ULI Video Player):**
+> "This application enables the end user to open and play DIVO and PAV files within the browser while connected to the website server (subject to any limitations programmed by the website operator)."
+
+### Technical Validation
+
+The contract explicitly describes:
+- **"Security keys based on time"**: confirms time-based key generation system
+- **Server-side key generation (SSKGP)**: explains why no keys exist on disc
+- **Network-required playback**: explains permanent failure after server shutdown
+- **PAV file format**: the exact format we reverse engineered
+
+Our 2024-2025 cryptanalysis independently rediscovered this architecture 25 years later through static binary analysis, with **zero access to UIT's original specifications**.
+
+**Contract details:**
+- Date: February 23, 1999
+- License fee: $200,000 USD
+- Term: 3 years
+- Filed: April 15, 1999 (SEC)
+
+**Full documentation:** [docs/PRIMARY_SOURCES.md](PRIMARY_SOURCES.md)
+**SEC filing:** https://www.lawinsider.com/contracts/2gp1TeImAUA
 
 ---
 
@@ -32,14 +65,14 @@ known method of recovery - until now.
 
 ```
 Offset  Bytes                              Meaning
-------  ---------------------------------  -------------------------
+------  ---------------------------------  --------------------------
 0x00    50 41 56 45 4E 43 52 59 50 54      "PAVENCRYPT" (10-byte magic)
-0x0A    00 00 01 BA ...                    MPEG-1 PS Pack Header (start of video data)
+0x0A    00 00 01 BA ...                    MPEG-1 PS Pack Header
 ```
 
-The MPEG-1 Program Stream begins immediately after the 10-byte magic with no gap.
-The `00 00` at offset 0x0A are the first two bytes of the MPEG start code prefix
-(`00 00 01`), not separate null padding.
+The MPEG-1 Program Stream begins immediately after the 10-byte magic header. The `00 00`
+bytes at offset 0x0A are the first two bytes of the MPEG start code prefix (`00 00 01`),
+not separate null padding.
 
 - MIME type: `video/ulifmt`
 - File signature (as registered in SETUP.INS): `0,10,,504156454E4352595054`
@@ -88,7 +121,7 @@ From the encryption boundary to EOF:
 
 ### DirectShow Filter Graph
 
-The ULI Player constructed this DirectShow graph for playback:
+The ULI Player constructed the following DirectShow filter graph for playback:
 
 ```
 PAV Source Filter ──→ MPEG-I Stream Splitter ──┬──→ MPEG Video Decoder ──→ Video Renderer
@@ -123,7 +156,7 @@ Exports:         DllCanUnloadNow, DllGetClassObject
 Imports:         KERNEL32 (file I/O), MSVCRT (string ops), WINMM (timing), ole32 (COM)
 ```
 
-No crypto API imports - the cipher is entirely custom, implemented in 25 bytes of x86.
+No crypto API imports. The cipher is entirely custom, implemented in 25 bytes of x86 assembly.
 
 ---
 
@@ -165,9 +198,9 @@ void decrypt(uint8_t *buffer, int length, uint8_t *key, int key_len) {
 1D1C1293: jmp    1D1C1278             ; loop
 ```
 
-The critical instruction is at **0x1D1C128F**: `sub byte ptr [eax], cl`. This is
-subtraction, not XOR - an important distinction that initially led analysis down the
-wrong path when XOR-based decryption attempts all failed.
+The critical instruction is at **0x1D1C128F**: `sub byte ptr [eax], cl`. This performs
+subtraction, not XOR. This distinction initially led analysis down the wrong path when
+XOR-based decryption attempts all failed.
 
 ### Key Format
 
@@ -266,7 +299,7 @@ for ki in range(key_len):
 **Step 3: Verify against known structure**
 
 ```python
-# Decrypt first 4 encrypted bytes - must be Pack Header
+# Decrypt first 4 encrypted bytes (must be Pack Header)
 test = [(data[enc_start + i] - key[i % key_len]) & 0xFF for i in range(4)]
 assert test == [0x00, 0x00, 0x01, 0xBA]  # MPEG-1 Pack Start Code
 ```
@@ -465,20 +498,20 @@ These correspond to different amounts of preview content (more packs = later enc
 ### Weaknesses of the PAVENCRYPT Scheme
 
 1. **No initialization vector**: Identical plaintext at the same offset always produces
-   identical ciphertext. No per-session or per-packet randomization.
+   identical ciphertext. The system lacks per-session or per-packet randomization.
 
-2. **Short repeating key**: Keys are 8-24 bytes cycling over megabytes of data. This
-   creates detectable periodicity in the ciphertext when applied to non-uniform plaintext.
+2. **Short repeating key**: Keys of 8-24 bytes cycle over megabytes of data, creating
+   detectable periodicity in the ciphertext when applied to non-uniform plaintext.
 
-3. **Abundant known plaintext**: MPEG-1 PS has fixed sync words every ~2KB (`00 00 01 BA`),
-   predictable PES headers, and large blocks of 0xFF padding. Any of these suffice for
-   full key recovery.
+3. **Abundant known plaintext**: MPEG-1 PS contains fixed sync words every 2KB (`00 00 01 BA`),
+   predictable PES headers, and large blocks of 0xFF padding. Any of these patterns suffice
+   for full key recovery.
 
-4. **No key derivation**: Keys are raw ASCII strings used directly as cipher material.
-   No hashing, stretching, or expansion.
+4. **No key derivation**: Keys are raw ASCII strings used directly as cipher material
+   without hashing, stretching, or expansion.
 
-5. **No integrity protection**: No MAC, HMAC, or checksum. Modified ciphertext decrypts
-   to modified plaintext with predictable effect.
+5. **No integrity protection**: The system provides no MAC, HMAC, or checksum. Modified
+   ciphertext decrypts to modified plaintext with predictable effects.
 
 6. **Subtraction vs XOR**: While SUB is slightly less common than XOR in toy ciphers,
    it provides no additional security. Both are linear operations trivially invertible
@@ -486,11 +519,11 @@ These correspond to different amounts of preview content (more packs = later enc
 
 ### Why It "Worked" in 1999
 
-The scheme was never intended as strong cryptography. It was DRM - the security model
+The scheme was never intended as strong cryptography. It was DRM. The security model
 assumed the decryption keys would remain secret on the server. The cipher's only job
-was to prevent casual hexdump-level access to the content. By 1999 standards for
+was preventing casual hexdump-level access to the content. By 1999 standards for
 multimedia DRM (CSS for DVDs used a 40-bit key with similar structural weaknesses),
-this was typical.
+this approach was typical.
 
 ---
 
@@ -504,8 +537,8 @@ this was typical.
 | ffprobe | Format verification |
 | ffmpeg | Conversion to H.264/AAC MP4 |
 
-The entire reverse engineering process - from raw ISO to playable video - was completed
-through static analysis only. No debugging, no emulation, no server interaction.
+The entire reverse engineering process (from raw ISO to playable video) was completed
+through static analysis alone. No debugging. No emulation. No server interaction.
 
 ---
 
